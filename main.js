@@ -50,8 +50,76 @@ var canvas = document.querySelector('canvas');
 // returning a drawing context, mpassing abunch of methods adn fucntions which allow sus to draw in 2d 
 var c = canvas.getContext('2d');
 
-// .fillRect takes 4 values, x, y, width, height x y relative from top left of canvas
-c.fillRect(100, 100, 100, 100);
-// console.log(canvas);
+// 3 event listener evennts
 
+// background
+// c.fillStyle = '#7ba7da';
+// c.fillRect(0, 0, 450, 300);
+// c.stroke();
+// c.fillStyle = '#eedc82';
+// c.fillRect(0, 300, 450, 450);
+// c.stroke();
+
+// font
+c.font = "30px Arial";
+c.fillStyle = "grey";
+c.fillText("feed", 48 , 430);
+c.fillText('play', 200, 430);
+c.fillText('clean', 338, 430);
+
+// sprite visual
+
+// circle = {
+//     location: {
+//         x: canvas.width / 2,
+//         y: canvas.height / 2
+//     },
+//     width: 120,
+//     height: this.width,
+//     style: {
+
+//     }
+// }
+
+// let x = canvas.width / 2;
+// let y = canvas.height / 2;
+
+
+
+// function circleStyle() {
+    // c.beginPath();
+    // c.arc(circle.location.x, canvas.height / 2, circle.width / 2, 0, Math.PI * 2, false);
+    // c.fillStyle = 'pink';
+    // c.fill();
+    // c.strokeStyle = 'pink';
+    // c.stroke();
+// }
+
+// function circleAnimate() {
+//     // creates loop for us try to make it 
+//     requestAnimationFrame(circleAnimate);
+//     c.clearRect(0, 0, 450, 450);
+//     c.beginPath();
+//     c.arc(x, y, circle.width / 2, 0, Math.PI * 2, false);
+//     c.fillStyle = 'pink';
+//     c.fill();
+//     c.strokeStyle = 'pink';
+//     c.stroke();
+//     x += 1;
+// }
+
+// circleAnimate();
+// circleStyle();
+
+
+
+// circle();
+
+// c.beginPath();
+// c.fillRect(canvas.width / 2, 240, 50, 50);
+
+let img = new Image(); 
+img.src = 'assets/char.png';
+c.drawImage(img, 0, 0);
+// background
 

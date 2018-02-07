@@ -1,0 +1,39 @@
+@import "style/setup";
+
+body {
+    background: url(assets/doodles.png);
+}
+canvas {
+    border: 1px red solid;
+    position: absolute;
+    /* position: relative; */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    min-width: 450px;
+    min-height: 450px;
+    background: white;
+}
+
+.container {
+    margin: 50px auto 0 auto;
+    width: 450px;
+    position: relative;
+}
+
+.button-container {
+    position: absolute;
+    top: 500px;
+    display: flex;
+    width: 450px;
+    justify-content: space-around;
+    button {
+        border-radius: 50%;
+        // border: 1px solid red;
+        outline: none;
+        padding: 10px;
+        background: pink;
+    }
+}

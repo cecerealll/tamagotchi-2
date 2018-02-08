@@ -42,13 +42,11 @@
 // canvas tutorial
 // create variable
 // query selector selects html element
-var canvas = document.querySelector('canvas');
 // canvas.width = window.innerWidth;
 // canvas.height = window.innerHeight;
 
 // create a variable for conntext
 // returning a drawing context, mpassing abunch of methods adn fucntions which allow sus to draw in 2d 
-var c = canvas.getContext('2d');
 
 // 3 event listener evennts
 
@@ -60,13 +58,9 @@ var c = canvas.getContext('2d');
 // c.fillRect(0, 300, 450, 450);
 // c.stroke();
 
-// font
-c.font = "30px Arial";
-c.fillStyle = "grey";
-c.fillText("feed", 48 , 430);
-c.fillText('play', 200, 430);
-c.fillText('clean', 338, 430);
 
+// character();
+// character();
 // sprite visual
 
 // circle = {
@@ -118,8 +112,137 @@ c.fillText('clean', 338, 430);
 // c.beginPath();
 // c.fillRect(canvas.width / 2, 240, 50, 50);
 
-let img = new Image(); 
-img.src = 'assets/char.png';
-c.drawImage(img, 0, 0);
+
 // background
 
+
+// variables for floor and jump height
+// img
+// character object
+// function - show img
+// set interval
+    // sit annd  wait for ticks to happen, and pass funnction 
+const canvas = document.querySelector('canvas');
+const c = canvas.getContext('2d');
+// canvas.width = 45
+let img = new Image();
+img.src = 'assets/char.png';
+let img2 = new Image();
+img2.src = 'assets/char-flipped.png';
+let carrot = new Image();
+carrot.src = 'assets/carrot.png';
+
+tamaApp = {};
+
+tamaApp.defaultLocationX = canvas.width * 0.5;
+tamaApp.defaultLocationY = canvas.height * 0.5;
+tamaApp.defaultStat = 100;
+
+tamaApp.charStat = {
+    location: {
+        x: tamaApp.defaultLocation,
+        y: tamaApp.defaultLocation
+    },
+    speedX: 2.5,
+    speedY: 1.5,
+    energy: tamaApp.defaultStat,
+    cleanliness: tamaApp.defaultStat,
+    fun: tamaApp.defaultStat
+}
+
+tamaApp.drawChar = function(x, y) {
+    c.drawImage(img, x, y, img.width / 4, img.height / 4);
+}
+tamaApp.drawChar2 = function (x, y) {
+    c.drawImage(img2, x, y, img.width / 4, img.height / 4);
+}
+
+
+
+
+// font
+// x = 0
+// y = 0
+
+tamaApp.text = function() {
+    c.font = "30px Arial";
+    c.fillStyle = "grey";
+    c.fillText("feed", 48, 430);
+    c.fillText('play', 200, 430);
+    c.fillText('clean', 338, 430);
+}
+
+tamaApp.statusBar = function() {
+    c.fillRect(25, 10, 100, 10);
+}
+
+// on load functio
+tamaApp.moveCharIdle = function() {
+    // makes loop 
+    requestAnimationFrame(tamaApp.moveCharIdle);
+    // clear the drawigns made before the nenw drawinng
+    c.clearRect(0, 30, 450, 370);
+    // dar the cahracter in halfway thru
+    tamaApp.drawChar(tamaApp.defaultLocationX, tamaApp.defaultLocationY);
+    // create a speed for  the characer changing the x locations
+    tamaApp.defaultLocationX += tamaApp.charStat.speedX;
+    tamaApp.defaultLocationY += tamaApp.charStat.speedY;
+
+
+    // so that the char doesnt go pas the canvas width
+    if(tamaApp.defaultLocationX > 350 || tamaApp.defaultLocationX < 10) {
+        // this makes the character go in the opp direction
+        tamaApp.charStat.speedX = -tamaApp.charStat.speedX;
+        
+    }
+    
+    if (tamaApp.defaultLocationY > 250 || tamaApp.defaultLocationY < 40 ) {
+        // this makes the character go in the opp direction
+        tamaApp.charStat.speedY = -tamaApp.charStat.speedY;
+
+    }
+
+    if (tamaApp.charStat.speedX < 0) {
+        c.clearRect(0, 30, 450, 370);
+        tamaApp.drawChar2(tamaApp.defaultLocationX, tamaApp.defaultLocationY);
+    }
+        
+    };
+
+
+// tamaApp.moveCharFood() {
+
+// }
+
+
+    // x++;
+    // console.log(tamaApp.defaultLocation);
+    // console.log(x);
+
+
+
+
+// c.translate(0, 0);
+
+
+// c.drawImage(img, 10, 10);
+
+
+
+
+
+
+
+$(function () {
+    // tamaApp.drawChar(tamaApp.defaultLocation, tamaApp.defaultLocation );
+    tamaApp.text();   
+    tamaApp.statusBar();
+    tamaApp.moveCharIdle();
+    // tamaApp.moveChar();   
+    // setInterval(tamaApp.drawChar(x, y), 3000);
+    // console.log(drawChar());                                                                                                                                                                                                                                                                         
+});
+
+// draw in order -
+// set in
+// array 

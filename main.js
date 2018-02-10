@@ -134,43 +134,50 @@ carrot.src = 'assets/carrot.png';
 let brush = new Image();
 brush.src = 'assets/hairbrush.png';
 
-tamaApp = {};
+tama = {};
 
-tamaApp.defaultLocationX = canvas.width * 0.4;
-tamaApp.defaultLocationY = canvas.height * 0.4;
-tamaApp.defaultStat = 100;
-tamaApp.objLocX = 100;
-tamaApp.objLocY = 150;
+tama.defaultLocationX = canvas.width * 0.4;
+tama.defaultLocationY = canvas.height * 0.4;
+tama.defaultStat = 100;
+tama.foodLocX = 100;
+tama.foodLocY = 150;
+tama.objLocX = 100;
+tama.objLocY = 150;
 
-tamaApp.charStat = {
+tama.charStat = {
     location: {
-        x: tamaApp.defaultLocationX,
-        y: tamaApp.defaultLocationY
+        x: tama.defaultLocationX,
+        y: tama.defaultLocationY
     },
+    move: function(x, y) {
+        this.location.x = this.location.x + x;
+        this.location.y = this.location.y + y;
+    },
+    
     width: img.width / 4,
     height: img.height / 4,
     speedX: 2.8,
     speedY: 1.2,
-    energy: tamaApp.defaultStat,
-    cleanliness: tamaApp.defaultStat,
-    fun: tamaApp.defaultStat
+    energy: tama.defaultStat,
+    cleanliness: tama.defaultStat,
+    fun: tama.defaultStat
 }
 
-tamaApp.drawChar = function(x, y, w, h) {
+tama.drawChar = function(x, y, w, h) {
     c.drawImage(img, x, y, w, h);
 }
-// tamaApp.drawCharRot = function (rad) {
-//     c.drawImage(img, tamaApp.defaultLocationX, tamaApp.defaultLocationY, img.width / 4, img.height / 4);
+// tama.drawCharRot = function (rad) {
+//     c.drawImage(img, tama.defaultLocationX, tama.defaultLocationY, img.width / 4, img.height / 4);
 //     // c.translate(canvas.width, canvas.height)
 //     c.rotate(rad);
 // }
-tamaApp.drawChar2 = function (x, y, w, h) {
+tama.drawChar2 = function (x, y, w, h) {
     c.drawImage(img2, x, y, w, h);
 }
-tamaApp.drawFood = function(x, y) {
+tama.drawFood = function(x, y) {
     c.drawImage(carrot, x, y, img.width / 6, img.height / 6);
 }
-tamaApp.drawBrush = function(x,y) {
+tama.drawBrush = function(x,y) {
     c.drawImage(brush, x, y, img.width / 5, img.height / 5);    
 }
 
@@ -181,7 +188,7 @@ tamaApp.drawBrush = function(x,y) {
 // x = 0
 // y = 0
 
-tamaApp.text = function() {
+tama.text = function() {
     c.font = "30px Arial";
     c.fillStyle = "grey";
     c.fillText("feed", 48, 430);
@@ -189,101 +196,121 @@ tamaApp.text = function() {
     c.fillText('clean', 338, 430);
 }
 
-tamaApp.statusBar = function() {
+tama.statusBar = function() {
     c.fillRect(25, 10, 100, 10);
     c.fillRect(25+100+50, 10, 100, 10);
     c.fillRect(25+100+50+100+50, 10, 100, 10);
-        
-
 }
 
+
 // on load functio
-tamaApp.moveCharIdle = function() {
+tama.moveCharIdle = function() {
     // makes loop 
-    requestAnimationFrame(tamaApp.moveCharIdle);
+    tama.frameId = requestAnimationFrame(tama.moveCharIdle);
     // clear the drawigns made before the nenw drawinng
     c.clearRect(0, 30, canvas.width, canvas.height);
     // draw the cahracter in halfway thru
-    tamaApp.drawChar(tamaApp.defaultLocationX, tamaApp.defaultLocationY, img.width / 4, img.height / 4);
+    tama.drawChar(tama.defaultLocationX, tama.defaultLocationY, img.width / 4, img.height / 4);
     // create a speed for  the characer changing the x locations
-    tamaApp.defaultLocationX += tamaApp.charStat.speedX;
-    tamaApp.defaultLocationY += tamaApp.charStat.speedY;
-    tamaApp.text();
-    tamaApp.statusBar();
+    tama.defaultLocationX += tama.charStat.speedX;
+    tama.defaultLocationY += tama.charStat.speedY;
+    tama.text();
+    tama.statusBar();
 
 
     // so that the char doesnt go pas the canvas width
-    if(tamaApp.defaultLocationX > 350 || tamaApp.defaultLocationX < 10) {
+    if(tama.defaultLocationX > 350 || tama.defaultLocationX < 10) {
         // this makes the character go in the opp direction
-        tamaApp.charStat.speedX = -tamaApp.charStat.speedX;
+        tama.charStat.speedX = -tama.charStat.speedX;
         
     }
     
-    if (tamaApp.defaultLocationY > 250 || tamaApp.defaultLocationY < 40 ) {
+    if (tama.defaultLocationY > 250 || tama.defaultLocationY < 40 ) {
         // this makes the character go in the opp direction
-        tamaApp.charStat.speedY = -tamaApp.charStat.speedY;
+        tama.charStat.speedY = -tama.charStat.speedY;
 
     }
 
-    if (tamaApp.charStat.speedX < 0) {
+    if (tama.charStat.speedX < 0) {
         c.clearRect(0, 30, canvas.width, canvas.height);
-        tamaApp.drawChar2(tamaApp.defaultLocationX, tamaApp.defaultLocationY, img.width / 4, img.height / 4);
-        tamaApp.text();
-        tamaApp.statusBar();
+        tama.drawChar2(tama.defaultLocationX, tama.defaultLocationY, img.width / 4, img.height / 4);
+
+        tama.text();
+        tama.statusBar();
     }
 };
 
 
-tamaApp.moveCharFood = function() {
-    requestAnimationFrame(tamaApp.moveCharFood);
+tama.moveCharFood = function() {
+    tama.frameId = requestAnimationFrame(tama.moveCharFood);
     c.clearRect(0, 30, canvas.width, canvas.height);
-    tamaApp.drawChar2(tamaApp.defaultLocationX + 50, tamaApp.defaultLocationY, img.width / 4, img.height / 4);
-    tamaApp.drawFood(tamaApp.objLocX, tamaApp.objLocY);
-    tamaApp.objLocX += tamaApp.charStat.speedX -1.5;
-    tamaApp.objLocY += tamaApp.charStat.speedY -0.7;
-    tamaApp.text();
-    tamaApp.statusBar();
+    tama.drawChar2(tama.defaultLocationX + 50, tama.defaultLocationY, img.width / 4, img.height / 4);
+    tama.drawFood(tama.foodLocX, tama.foodLocY);
+    tama.foodLocX += tama.charStat.speedX -1.5;
+    tama.foodLocY += tama.charStat.speedY -0.7;
+    tama.text();
+    tama.statusBar();
 
-    if(tamaApp.objLocX >= tamaApp.defaultLocationX + 20) {
-        tamaApp.objLocX = 900;
-        cancelAnimationFrame(tamaApp.moveCharFood);
+    if(tama.foodLocX >= tama.defaultLocationX + 20) {
+        // tama.foodLocX = 900;
+        // cancelAnimationFrame(tama.moveCharFood);
         c.clearRect(0, 30, canvas.width, canvas.height);
-        tamaApp.text();
-        tamaApp.statusBar();
-        tamaApp.drawChar2(tamaApp.defaultLocationX -50, tamaApp.defaultLocationY - 80, img.width / 2, img.height / 2);
+        tama.text();
+        tama.statusBar();
+        tama.drawChar2(tama.defaultLocationX -50, tama.defaultLocationY - 80, img.width / 2, img.height / 2);
 
         c.fillText("yas", 330, 130);
-        // tamaApp.drawCharRot(45)
     }
-    // c.clearRect(0,0, canvas.width, canvas.height);
-    // cancelAnimationFrame(moveCharFood);
-    // tamaApp.moveCharIdle();
-    // tamaApp.drawChar2(tamaApp.defaultLocationX+50, tamaApp.defaultLocationY); 
+    if(tama.foodlocX < 0 ) {
+        // c.clearRect(0, 30, canvas.width, canvas.height);
+        // tama.drawChar2(tama.defaultLocationX, tama.defaultLocationY, img.width / 4, img.height / 4);
+        tama.charStat.speedX = -tama.charStat.speedX;
+    }
+        
+    
 };
 
-tamaApp.moveCharClean = function(){
-    requestAnimationFrame(tamaApp.moveCharClean);
+tama.moveCharClean = function(){
+    tama.frameId = requestAnimationFrame(tama.moveCharClean);
     c.clearRect(0, 30, canvas.width, canvas.height);
-    tamaApp.drawChar2(tamaApp.defaultLocationX -50, tamaApp.defaultLocationY, img.width / 4, img.height / 4);
-    tamaApp.drawBrush(tamaApp.objLocX +110, tamaApp.objLocY);
-    // tamaApp.objLocX -= tamaApp.charStat.speedX - 2;
-    tamaApp.objLocY -= tamaApp.charStat.speedY;
-    if (tamaApp.objLocY > 180 || tamaApp.objLocY < 150) {
+    tama.drawChar2(tama.defaultLocationX -50, tama.defaultLocationY, img.width / 4, img.height / 4);
+    tama.drawBrush(tama.objLocX +110, tama.objLocY);
+    // tama.objLocX -= tama.charStat.speedX - 2;
+    tama.objLocY -= tama.charStat.speedY;
+    if (tama.objLocY > 180 || tama.objLocY < 150) {
         // this makes the character go in the opp direction
-        tamaApp.charStat.speedY = -tamaApp.charStat.speedY;
+        tama.charStat.speedY = -tama.charStat.speedY;
     }
-    tamaApp.text();
-    tamaApp.statusBar();
+    tama.text();
+    tama.statusBar();
+}
+
+function init() {
+    tama.moveCharIdle();
+
+    $('.left').on('click', function() {
+        // c.clearRect(0,0,canvas.width, canvas.height);
+        //requestAnimationFrame(tama.moveCharIdle);
+        cancelAnimationFrame(tama.frameId);
+        tama.moveCharFood();
+    });
+    $('.right').on('click', function() {
+        cancelAnimationFrame(tama.frameId);
+        
+        tama.moveCharClean();
+    });
+
 }
 
 
-// tamaApp.moveCharFood() {
+
+// tama.moveCharFood() {
 
 // }
 
 
     // x++;
-    // console.log(tamaApp.defaultLocation);
+    // console.log(tama.defaultLocation);
     // console.log(x);
 
 
@@ -301,10 +328,11 @@ tamaApp.moveCharClean = function(){
 
 
 $(function () {
-    // tamaApp.drawChar(tamaApp.defaultLocation, tamaApp.defaultLocation );
+    init();
+    // tama.drawChar(tamaApp.defaultLocation, tamaApp.defaultLocation );
     // tamaApp.text();   
     // tamaApp.statusBar();
-    tamaApp.moveCharIdle();
+    // tamaApp.moveCharIdle();
     // tamaApp.moveCharFood();   
     // tamaApp.moveCharClean();
                                                                                                                                                                                   

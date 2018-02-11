@@ -251,7 +251,7 @@ tama.clean = function() {
             tama.charStat.score += 2;
         }
     }
-    
+
 
 
     
@@ -270,6 +270,7 @@ tama.clean = function() {
             tama.charStat.speedY = -tama.charStat.speedY;
             cancelAnimationFrame(tama.frameID2);
         }
+        
         
 
 

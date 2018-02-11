@@ -251,6 +251,7 @@ tama.clean = function() {
             tama.charStat.score += 2;
         }
     }
+    
 
 
     

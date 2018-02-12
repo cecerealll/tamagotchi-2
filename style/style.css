@@ -133,12 +133,11 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
   box-sizing: border-box; }
 
 body {
-  background: url(assets/doodles.png); }
+  background: url(../assets/background-2.png); }
 
 canvas {
-  border: 1px red solid;
+  border: 2px pink dotted;
   position: absolute;
-  /* position: relative; */
   top: 0;
   left: 0;
   right: 0;
@@ -146,26 +145,16 @@ canvas {
   margin: 0 auto;
   min-width: 450px;
   min-height: 450px;
-  background: white; }
+  background: white;
+  border-radius: 10px; }
 
 .container {
   margin: 50px auto 0 auto;
   width: 450px;
   position: relative; }
 
-.inner-container {
-  position: relative; }
-
-.word-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  position: absolute;
-  top: 450px;
-  width: 450px;
-  -ms-flex-pack: distribute;
-  justify-content: space-around;
-  text-align: center; }
+.grey {
+  color: darkgrey; }
 
 .button-container {
   position: absolute;
@@ -193,9 +182,50 @@ canvas {
       text-transform: uppercase;
       color: grey;
       font-size: 25px;
-      font-weight: bold; }
+      font-weight: 700; }
   .button-container button {
     border-radius: 50%;
     outline: none;
+    border: 1px solid rgba(211, 184, 32, 0.986);
     padding: 15px;
-    background: pink; }
+    background: rgba(255, 228, 77, 0.89);
+    -webkit-box-shadow: 0px 7px 0px rgba(211, 184, 32, 0.986);
+    box-shadow: 0px 7px 0px rgba(211, 184, 32, 0.986);
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    top: 0px; }
+    .button-container button:active {
+      top: 3px;
+      background: #dfc21f;
+      -webkit-box-shadow: 0px 3px 0px #c0a049;
+      box-shadow: 0px 3px 0px #c0a049; }
+
+.social {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: fixed;
+  bottom: 30%;
+  right: 25%; }
+  @media (max-width: 1300px) {
+    .social {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      position: absolute;
+      top: 0;
+      left: 30%; } }
+  .social .twitter {
+    margin-right: 20px; }
+  .social a {
+    text-decoration: none;
+    font-size: 50px; }
+    .social a:visited {
+      text-decoration: none;
+      color: salmon; }

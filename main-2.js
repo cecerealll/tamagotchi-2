@@ -1,3 +1,4 @@
+// hey quick note the amazing personn markinng my code, i have an issue with my "n" key so you might enncounter many many inntances where the n is nont where it should be in my commennts, sorry!
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -11,6 +12,10 @@ let brush = new Image();
 brush.src = 'assets/hairbrush.png';
 let hurdle = new Image();
 hurdle.src = 'assets/bush.png';
+let flower = new Image();
+flower.src = 'assets/flower.png'
+let cloud = new Image();
+cloud.src = 'assets/cloud.png'
 const floor = canvas.height * 0.55;
 const ceiling = 100;
 const jmpUp = 2.8;
@@ -27,11 +32,11 @@ tama.clear = function() {
     c.clearRect(0,0,canvas.width,canvas.height);
 }
 
-// const reset = document.getElementsByClassName('reset');
 
 
 // statistics of each object
 tama.charStat = {
+    name: prompt('Name your Tamagotchi!'),
     locX: canvas.width * 0.4,
     locY: canvas.height * 0.4,
     newLocX: canvas.width * 0.4,
@@ -42,10 +47,9 @@ tama.charStat = {
     speedY: 1,
     jumpSpd: jmpUp,  
     food: 100,
-    fun: 100,
+    play: 100,
     clean: 100,
     score: 0,
-    // isJumping: false
 };
 
 tama.foodStat = {
@@ -75,14 +79,23 @@ tama.hurdleStat = {
     speedY: 1
 };
 
+tama.cloudStat = {
+    locX: canvas.width + cloud.width,
+    locY: canvas.height * 0.2,
+    newLocX: canvas.width + cloud.width,
+    newLocY: canvas.height * 0.2,
+    speedX: 2,
+    speedY: 1
+};
+
 
 
 // fill backgrounnd with 2 colors to be passed in
 tama.background = function(a, b) {
     c.fillStyle = a;
-    c.fillRect(0, 0, canvas.width, canvas.height * 0.4);
+    c.fillRect(0, 0, canvas.width, floor);
     c.fillStyle = b;
-    c.fillRect(0, canvas.height * 0.4 , canvas.width, canvas.height * 0.6);
+    c.fillRect(0, floor , canvas.width, canvas.height * 0.55);
 }
 
 
@@ -93,13 +106,11 @@ tama.reset = function() {
 }
 
 
-// text may not be needed soonn
+// text on canvas
 tama.text = function() {
-    c.font = "28px Monda";
+    c.font = "14px Monda";
     c.fillStyle = "grey";
-    c.fillText("FEED", 40, 430);
-    c.fillText('PLAY', 190, 430);
-    c.fillText('CLEAN', 327, 430);
+    c.fillText('Please wait till animation is finished before clicking button!', 30, 440);
 }
 
 
@@ -112,7 +123,7 @@ tama.statusBar = function() {
     c.fillText("FULLNESS", 260, 39);  
 
     c.fillStyle = "mediumaquamarine";
-    c.fillRect(325, 50,tama.charStat.fun, 12);
+    c.fillRect(325, 50,tama.charStat.play, 12);
     c.fillStyle = "grey";            
     c.fillText("HAPPINESS", 250, 59.5); 
     c.fillStyle = "lightblue";
@@ -121,21 +132,26 @@ tama.statusBar = function() {
     c.fillText("CLEANLINESS", 235, 80.5); 
 }
 
+// display score
 tama.scoreCount = function(){
     c.font = "20px Monda";    
-    c.fillText("SCORE", 20, 50);
-    c.fillText(tama.charStat.score, 110, 50);
+    c.fillText("SCORE", 20, 80);
+    c.fillText(tama.charStat.score, 110, 80);
     
     
 }
 // adds text adn status to screen everytime we clear the screen we may not need the text soon
 tama.setScreen = function() {
     // tama.background('white', 'white');
-    // tama.text();
+    tama.text();
     tama.statusBar();
+    c.font = "25px Monda";        
+    c.fillText(tama.charStat.name, 20, 45);    
+    
 }
 
-// drawinng inn the differetn images at diffterent locationns dependinng
+// drawinng inn the different images at diffterent locationns dependinng
+// draw image takes inn the img, x, y , width and height
 tama.charDraw = function(x, y, w, h) {
     c.drawImage(char, x, y, w, h);
 }
@@ -153,17 +169,23 @@ tama.cleanDraw = function () {
 }
 tama.hurdleDraw = function () {
     c.drawImage(hurdle, tama.hurdleStat.newLocX, tama.hurdleStat.newLocY, hurdle.width / 6, hurdle.width / 6);
+} 
+
+tama.flowerDraw = function (x, y) {
+    c.drawImage(flower, x, y, flower.width / 10, flower.width / 10);
+} 
+
+tama.cloudDraw = function(y) {
+    c.drawImage(cloud, tama.cloudStat.newLocX, y, cloud.width / 7, cloud.height / 7);
+    
 }
 
-// idle function
+// idle screen function
 tama.idle = function(){
-    // tama.imgImport();
     tama.reset();    
     tama.frameID = requestAnimationFrame(tama.idle);
-    // c.clearRect(0,0,canvas.width, canvas.height());
-    // tama.charDraw(0, 0);
     tama.clear();
-    // tama.charStat.reset();
+    tama.background('snow', 'snow');
     tama.charDraw(tama.charStat.newLocX, tama.charStat.newLocY, char.width / 3.5, char.height / 3.5);
     tama.charStat.newLocX += tama.charStat.speedX*2.5;
     tama.charStat.newLocY += tama.charStat.speedY*1.2;
@@ -179,24 +201,22 @@ tama.idle = function(){
     if (tama.charStat.speedX < 0) {
         tama.clear();
         // tama.setScreen();
+        tama.background('snow', 'snow');
         tama.charDrawF(tama.charStat.newLocX, tama.charStat.newLocY, char.width / 3.5, char.height / 3.5);
+        
     }
-
     tama.setScreen();
 }
 
-// feed functionn
+// feed annimation
 tama.food = function() {
-    // cancelAnimationFrame(tama.idle);    
     tama.reset();
     tama.frameID = requestAnimationFrame(tama.food);
     tama.clear();
-    // tama.charStat.reset();
+    tama.background('snow', 'snow');
+    
     tama.charDrawF(tama.charStat.locX, tama.charStat.locY, char.width / 3, char.height / 3);
     tama.foodDraw();   
-    // c.fillText("HAPPINESS", 250, 59.5); 
-    
-    // tama.barResetF();
     
 
     if(tama.foodStat.locX > 0){
@@ -205,14 +225,17 @@ tama.food = function() {
     } 
 
     if(tama.foodStat.locX >= tama.charStat.locX) {
-        // tama.clear();
-        // tama.foodStat.locX = tama.foodStat.newLocX;
         tama.clear();
         cancelAnimationFrame(tama.frameID);
+        tama.background('snow', 'snow');
+        
         tama.charDrawF(tama.charStat.locX / 2.7, tama.charStat.locY/ 1.5, char.width / 1.7, char.height / 1.7);
         c.font = "40px Monda";
         c.fillStyle = "grey";
         c.fillText("Yaaas", 300, 200); 
+        c.font = "30px Monda";
+        // c.fillStyle = "grey";
+        c.fillText("*burp*", 320, 240); 
         tama.foodStat.locX = tama.foodStat.newLocX;
         tama.foodStat.locY = tama.foodStat.newLocY;;
     } 
@@ -225,8 +248,19 @@ tama.clean = function() {
     tama.reset();
     tama.frameID = requestAnimationFrame(tama.clean);
     tama.clear();
-    // tama.barResetB();
-    tama.charDrawF(tama.charStat.locX - 40, tama.charStat.locY, char.width / 3, char.height / 3);    
+    tama.background('snow', 'snow');
+    
+    tama.charDrawF(tama.charStat.locX - 40, tama.charStat.locY, char.width / 3, char.height / 3);   
+    
+    tama.flowerDraw(50, 170);
+    tama.flowerDraw(160, 76);
+    tama.flowerDraw(300, 300);
+    tama.flowerDraw(100, 320);
+    tama.flowerDraw(320, 150);
+    
+    c.font = "18px Monda";
+    c.fillStyle = "grey";
+    c.fillText("*brush brush*", 220, 150); 
     tama.cleanDraw(tama.brushStat.locX, tama.brushStat.locY);
     tama.setScreen();   
     tama.brushStat.locY += tama.brushStat.speedY;
@@ -235,66 +269,60 @@ tama.clean = function() {
     }  
 }
 
-// // play mode
-// tama.play = function() {
-    
-    
-
-
-    tama.play = function() {
-        tama.reset();
-        tama.frameID = requestAnimationFrame(tama.play);
+// play screen with movinng bush andn clouds
+tama.play = function() {
+    tama.reset();
+    tama.frameID = requestAnimationFrame(tama.play);
+    tama.clear();
+    tama.background('#a8f0ff', '#fdea9e');
+    tama.charDraw(0, tama.charStat.playLocY, char.width / 4, char.height / 4);
+    tama.barResetP();
+    tama.setScreen();
+    tama.scoreCount();
+    tama.cloudDraw(canvas.height * 0.2);       
+    tama.cloudStat.newLocX -= tama.cloudStat.speedX
+    if (tama.cloudStat.newLocX <= - cloud.width / 7) {
+        tama.cloudStat.newLocX = canvas.width + cloud.width / 7;
+    } 
+    tama.hurdleDraw();
+    tama.hurdleStat.newLocX -= tama.hurdleStat.speedX;
+    if (tama.hurdleStat.newLocX + 50 <= char.width / 4 && tama.hurdleStat.newLocY <= char.height / 4 + tama.charStat.playLocY && tama.hurdleStat.newLocX > 0){
+        cancelAnimationFrame(tama.frameID);
         tama.clear();
-        tama.charDraw(0, tama.charStat.playLocY, char.width / 4, char.height / 4);
-         tama.setScreen();
-         tama.scoreCount();
-         tama.hurdleDraw();
-        tama.hurdleStat.newLocX -= tama.hurdleStat.speedX;
-        if (tama.hurdleStat.newLocX + 50 <= char.width / 4 && tama.hurdleStat.newLocY <= char.height / 4 + tama.charStat.playLocY && tama.hurdleStat.newLocX > 0){
-            cancelAnimationFrame(tama.frameID);
-            // cancelAnimationFrame(tama.frameID2);
-            tama.clear();
-            c.fillText("GAME OVER", 300, 200); 
-            // tama.charStat.score
-            // isPlaying = false;
-            // tama.timeOut(2000);
-            tama.gameOverTimeOut(1000);
+        tama.scoreCount();          
+        c.font = "40px Monda";            
+        c.fillText("GAME OVER", 160, 200); 
+        c.font = "20px Monda";                        
+        c.fillText(`¯\\_(ツ)_/¯`, 200, 250);             
+        tama.gameOverTimeOut(1500);
 
-        }
-        if(tama.hurdleStat.newLocX <= - hurdle.width / 6) {
-            tama.hurdleStat.newLocX = canvas.width - 60;
-            tama.charStat.score += 2;
-        } 
     }
+    if(tama.hurdleStat.newLocX <= - hurdle.width / 6) {
+        tama.hurdleStat.newLocX = canvas.width - 60;
+        tama.charStat.score += 5;
+    } 
+}
 
+// jump animation, needs separate frame id so both animationn could run at same time
+tama.jump = function() { 
+    cancelAnimationFrame(tama.frameID2);
+    tama.frameID2 = requestAnimationFrame(tama.jump);
+    tama.charDraw(0, tama.charStat.playLocY, char.width / 4, char.height / 4);
+    tama.setScreen();
 
-
-    // let jumpingSpeed = tama.charStat.jumpSpdUp;
-    tama.jump = function() { 
+    tama.charStat.playLocY -= tama.charStat.jumpSpd;
+    if(tama.charStat.playLocY <= ceiling){
+        tama.charStat.jumpSpd = -jmpDown;
+    } else if(tama.charStat.playLocY >= floor){
+        tama.charStat.jumpSpd = jmpUp;
+        tama.charStat.playLocY = floor;
         cancelAnimationFrame(tama.frameID2);
-        tama.frameID2 = requestAnimationFrame(tama.jump);
-        // tama.clear();
-        tama.charDraw(0, tama.charStat.playLocY, char.width / 4, char.height / 4);
-        tama.setScreen();
-
-        tama.charStat.playLocY -= tama.charStat.jumpSpd;
-        if(tama.charStat.playLocY <= ceiling){
-            tama.charStat.jumpSpd = -jmpDown;
-        } else if(tama.charStat.playLocY >= floor){
-            tama.charStat.jumpSpd = jmpUp;
-            tama.charStat.playLocY = floor;
-            cancelAnimationFrame(tama.frameID2);
-        }
-        
-        if (tama.hurdleStat.newLocX + 50 <= char.width / 4 && tama.hurdleStat.newLocY <= char.height / 4 + tama.charStat.playLocY && tama.hurdleStat.newLocX > 0) {
-            cancelAnimationFrame(tama.frameID2);
-            // c.fillText("GAME OVER", 300, 200); 
-            
-            // tama.clear();
-        }
     }
-
     
+    if (tama.hurdleStat.newLocX + 50 <= char.width / 4 && tama.hurdleStat.newLocY <= char.height / 4 + tama.charStat.playLocY && tama.hurdleStat.newLocX > 0) {
+        cancelAnimationFrame(tama.frameID2);
+    }
+}
 
 
 
@@ -304,6 +332,7 @@ tama.timeOut = function(x) {
     timeoutID = setTimeout(tama.idle, x);
 }
 
+// setting a timeout for when game ennds and resetting the caharacter back into position so a new ggame coudl start
 tama.gameOverTimeOut = function(x) {
     timeoutID = setTimeout(function(){
         tama.idle();
@@ -311,32 +340,17 @@ tama.gameOverTimeOut = function(x) {
         tama.hurdleStat.newLocX =  tama.hurdleStat.locX;
         tama.charStat.playLocY = floor;
         tama.charStat.score = 0;
+        $('.hide').show();
     }, x);
 }
 
-//
-
-// function foo (arg, callback) {
-
-//     if (typeof callback == 'function') callback();
-// }
-
-// foo('hi', 12312412)
-
-//tama.timeOut = function (x, callback) {
-//     timeoutID = setTimeout(function () {
-//         tama.idle();
-//         if (typeof callback === 'function') {
-//             callback();
-//         }
-//     }, x);
-// }
-
 
 // status bar, how much the status bar will decrease by
-tama.barDecrease = function(food, clean) {
+tama.barDecrease = function(food, clean, play) {
     intervalID = setInterval(food, 1000);
-    intervalID = setInterval(clean, 2000);    
+    intervalID = setInterval(clean, 2000);  
+    intervalID = setInterval(play, 3000);    
+      
 }
 
 // tellingn the food status bar to decrease by one per time speicfied in the bar decrease function
@@ -365,34 +379,35 @@ tama.barResetB = function () {
     tama.charStat.clean = 100;
 }
 
+// agiann for play
+tama.playBar = function () {
+    tama.charStat.play--;
+    if (tama.charStat.play <= 0) {
+        tama.charStat.play = 0;
+        cancelAnimationFrame(tama.frameID);
+    }
+}
+tama.barResetP = function () {
+    tama.charStat.play = 100;
+}
+
+
 
 tama.init = function() {
-    // tama.imgImport(); this doen tdo anything
-    // tama.setScreen();
-    // tama.charDraw(0, 0, char.width / 4, char.height / 4);
     tama.idle();
-    tama.barDecrease(tama.foodBar, tama.cleanBar);
-    // tama.food();
-    // tama.reset();
+    tama.barDecrease(tama.foodBar, tama.cleanBar, tama.playBar);
     $('.left').on('click', function() {
-        // c.clearRect(0,0,canvas.width, canvas.height);
-        //requestAnimationFrame(tama.moveCharIdle);
-        // tama.clear();
-        // cancelAnimationFrame(tama.frameID);
-        // tama.charStat.reset();
-        // tama.clear();
-        // tama.reset();
+        // so that it doesnt trigger when playing
         if(!isPlaying) {
             tama.barResetF();
             tama.food();
-            tama.timeOut(3000);
+            tama.timeOut(2300);
         }
-
-        // tama.charStat.food
-        // tama.idle();
     });
 
     $('.middle').on('click', function(){
+        // hide the button so they cant even click it hahahahahahhahahahahah
+        $('.hide' ).hide();
         if (!isPlaying) {
             isPlaying = true;
             tama.play();
@@ -400,6 +415,7 @@ tama.init = function() {
             tama.jump();
         }
     });
+
     $('.right').on('click', function () {
         if(!isPlaying) {
             tama.barResetB();        
@@ -409,18 +425,11 @@ tama.init = function() {
     });
 }
 
-
-
 $(function() {
     tama.init();
-    // tama.play();
-    //tama.jump();
-    //   $('.play').on('click', function () {
-    //       tama.jump();
-    //       // tama.frameID = requestAnimationFrame(tama.play);
-    //   });
-    // tama.charDrawF(tama.charStat.locX, tama.charStat.locY);
 });
+
+// nts along the way
 
 // how to make the food screen last for 3 sec and then go back to idle
 // make object distance relative to char
@@ -448,3 +457,5 @@ $(function() {
 // making a shell backgrounnd for screen, change color to show responsiveness
 
 // think about issue with status bars, because i stopped animaation the bar values are goinng down but the bar is not reflecting so
+
+

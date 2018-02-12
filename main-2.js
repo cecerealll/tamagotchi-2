@@ -12,7 +12,9 @@ brush.src = 'assets/hairbrush.png';
 let hurdle = new Image();
 hurdle.src = 'assets/bush.png';
 const floor = canvas.height * 0.55;
-const ceiling = 150;
+const ceiling = 100;
+const jmpUp = 2.8;
+const jmpDown = 2.5;
 let isPlaying = false;
 let timeoutID;
 let intervalID;
@@ -27,6 +29,7 @@ tama.clear = function() {
 
 // const reset = document.getElementsByClassName('reset');
 
+
 // statistics of each object
 tama.charStat = {
     locX: canvas.width * 0.4,
@@ -37,6 +40,7 @@ tama.charStat = {
     playNLocY: canvas.height * 0.55,    
     speedX: 1,
     speedY: 1,
+    jumpSpd: jmpUp,  
     food: 100,
     fun: 100,
     clean: 100,
@@ -67,7 +71,7 @@ tama.hurdleStat = {
     locY: canvas.height * 0.6,
     newLocX: canvas.width - 60,
     newLocY: canvas.height * 0.6,
-    speedX: 1,
+    speedX: 3,
     speedY: 1
 };
 
@@ -246,71 +250,51 @@ tama.clean = function() {
          tama.scoreCount();
          tama.hurdleDraw();
         tama.hurdleStat.newLocX -= tama.hurdleStat.speedX;
+        if (tama.hurdleStat.newLocX + 50 <= char.width / 4 && tama.hurdleStat.newLocY <= char.height / 4 + tama.charStat.playLocY && tama.hurdleStat.newLocX > 0){
+            cancelAnimationFrame(tama.frameID);
+            // cancelAnimationFrame(tama.frameID2);
+            tama.clear();
+            c.fillText("GAME OVER", 300, 200); 
+            // tama.charStat.score
+            // isPlaying = false;
+            // tama.timeOut(2000);
+            tama.gameOverTimeOut(1000);
+
+        }
         if(tama.hurdleStat.newLocX <= - hurdle.width / 6) {
             tama.hurdleStat.newLocX = canvas.width - 60;
             tama.charStat.score += 2;
-        }
+        } 
     }
 
 
 
-    
+    // let jumpingSpeed = tama.charStat.jumpSpdUp;
     tama.jump = function() { 
         cancelAnimationFrame(tama.frameID2);
         tama.frameID2 = requestAnimationFrame(tama.jump);
-        tama.clear();
+        // tama.clear();
         tama.charDraw(0, tama.charStat.playLocY, char.width / 4, char.height / 4);
         tama.setScreen();
 
-        console.log('hi');
-        tama.charStat.playLocY -= tama.charStat.speedY;
+        tama.charStat.playLocY -= tama.charStat.jumpSpd;
         if(tama.charStat.playLocY <= ceiling){
-            tama.charStat.speedY = -tama.charStat.speedY;
+            tama.charStat.jumpSpd = -jmpDown;
         } else if(tama.charStat.playLocY >= floor){
-            tama.charStat.speedY = -tama.charStat.speedY;
+            tama.charStat.jumpSpd = jmpUp;
+            tama.charStat.playLocY = floor;
             cancelAnimationFrame(tama.frameID2);
         }
         
-        
-
-
-        // if (tama.charStat.playLocY >= floor && !tama.isJumping) {
-        //     tama.charStat.playLocY -= tama.charStat.speedY;
-        // } else if (tama.charStat.playLocY <= ceiling && tama.isJumping) {
-        //     tama.charStat.playLocY += tama.charStat.speedY;
-        // }
-
-        // if (tama.charStat.playLocY <= floor) tama.isJumping = false;
-        
-        // else if (tama.charStat.playLocY >= canvas.height * 0.55) {
-        //     tama.charStat.playLocY = tama.charStat.playNLocY;
-        // }
-        // });
+        if (tama.hurdleStat.newLocX + 50 <= char.width / 4 && tama.hurdleStat.newLocY <= char.height / 4 + tama.charStat.playLocY && tama.hurdleStat.newLocX > 0) {
+            cancelAnimationFrame(tama.frameID2);
+            // c.fillText("GAME OVER", 300, 200); 
+            
+            // tama.clear();
+        }
     }
 
-    $('.play').on('click', function(){
-        // isPlaying = true;
-        if(!isPlaying){
-            isPlaying = true;
-            tama.play();
-        }else {
-            tama.jump();
-        }
-        // if(isPlaying)
-    });
     
-//     // } else if (tama.hurdleStat.newLocX <= char.width / 4 && tama.hurdleStat.newLocY ) {
-//     //     tama.hurdleStat.newLocX = canvas.width - 60;
-//     // }
-
-//     // $('.play').on('click', function() {
-//     // // tama.frameID = requestAnimationFrame(tama.play);  
-//     // // tama.clear();          
-//     //     tama.charStat.locY -= tama.charStat.speedY;
-//     // });
- 
-// }
-
 
 
 
@@ -319,6 +303,34 @@ tama.clean = function() {
 tama.timeOut = function(x) {
     timeoutID = setTimeout(tama.idle, x);
 }
+
+tama.gameOverTimeOut = function(x) {
+    timeoutID = setTimeout(function(){
+        tama.idle();
+        isPlaying = false;
+        tama.hurdleStat.newLocX =  tama.hurdleStat.locX;
+        tama.charStat.playLocY = floor;
+        tama.charStat.score = 0;
+    }, x);
+}
+
+//
+
+// function foo (arg, callback) {
+
+//     if (typeof callback == 'function') callback();
+// }
+
+// foo('hi', 12312412)
+
+//tama.timeOut = function (x, callback) {
+//     timeoutID = setTimeout(function () {
+//         tama.idle();
+//         if (typeof callback === 'function') {
+//             callback();
+//         }
+//     }, x);
+// }
 
 
 // status bar, how much the status bar will decrease by
@@ -370,23 +382,37 @@ tama.init = function() {
         // tama.charStat.reset();
         // tama.clear();
         // tama.reset();
-        tama.barResetF();
-        tama.food();
-        tama.timeOut(3000);
+        if(!isPlaying) {
+            tama.barResetF();
+            tama.food();
+            tama.timeOut(3000);
+        }
+
         // tama.charStat.food
         // tama.idle();
     });
+
+    $('.middle').on('click', function(){
+        if (!isPlaying) {
+            isPlaying = true;
+            tama.play();
+        } else {
+            tama.jump();
+        }
+    });
     $('.right').on('click', function () {
-        tama.barResetB();        
-        tama.clean();
-        tama.timeOut(1700);
+        if(!isPlaying) {
+            tama.barResetB();        
+            tama.clean();
+            tama.timeOut(1700);
+        }
     });
 }
 
 
 
 $(function() {
-    // tama.init();
+    tama.init();
     // tama.play();
     //tama.jump();
     //   $('.play').on('click', function () {
@@ -406,6 +432,7 @@ $(function() {
 // put in 5 flowers at random places during clean
 
 // put yas inn the food aninmation
+// make it so that you cant click any key when food or clea nanimation ngoinng on
 
 // make the play function
     // make the obstacle object

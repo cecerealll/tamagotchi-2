@@ -143,7 +143,6 @@ tama.scoreCount = function(){
 // adds text adn status to screen everytime we clear the screen we may not need the text soon
 tama.setScreen = function() {
     // tama.background('white', 'white');
-    tama.text();
     tama.statusBar();
     c.font = "25px Monda";        
     c.fillText(tama.charStat.name, 20, 45);    
@@ -240,6 +239,8 @@ tama.food = function() {
         tama.foodStat.locY = tama.foodStat.newLocY;;
     } 
     tama.setScreen();   
+    tama.text();
+    
     
 }
 
@@ -263,6 +264,8 @@ tama.clean = function() {
     c.fillText("*brush brush*", 220, 150); 
     tama.cleanDraw(tama.brushStat.locX, tama.brushStat.locY);
     tama.setScreen();   
+    tama.text();
+    
     tama.brushStat.locY += tama.brushStat.speedY;
     if(tama.brushStat.locY < 175 || tama.brushStat.locY > 195) {
         tama.brushStat.speedY = -tama.brushStat.speedY;
@@ -293,7 +296,8 @@ tama.play = function() {
         c.font = "40px Monda";            
         c.fillText("GAME OVER", 160, 200); 
         c.font = "20px Monda";                        
-        c.fillText(`¯\\_(ツ)_/¯`, 200, 250);             
+        c.fillText(`¯\\_(ツ)_/¯`, 200, 250);
+        tama.text();                     
         tama.gameOverTimeOut(1500);
 
     }

@@ -225,7 +225,8 @@ canvas {
     margin-right: 20px; }
   .social a {
     text-decoration: none;
-    font-size: 50px; }
-    .social a:visited {
+    font-size: 50px;
+    color: salmonl .social a; }
+    .social a :visited {
       text-decoration: none;
       color: salmon; }
